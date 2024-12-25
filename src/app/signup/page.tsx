@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function SignupPage() {
   const [user, setUser] = useState({
@@ -16,7 +17,6 @@ function SignupPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-
   const HandleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
