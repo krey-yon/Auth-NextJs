@@ -27,6 +27,7 @@ function SignupPage() {
       
   } catch (error:any) {
       console.log("Signup failed", error.message);
+      console.log(user);
       
       toast.error(error.message);
   }finally {

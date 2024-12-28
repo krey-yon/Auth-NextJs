@@ -2,6 +2,7 @@ import { dbConnect } from "@/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
+import { sendEmail } from "@/helpers/mailer";
 
 dbConnect();
 
@@ -32,9 +33,13 @@ export async function POST(request: NextRequest) {
       password: hashedPassword,
     });
 
+    console.log(newUser);
 
-    const savedUser = newUser.save();
-    // console.log(savedUser);
+    const savedUser = await newUser.save();
+    console.log(savedUser._id);
+    //send email to user
+    await sendEmail({email, emailType: "VERIFY", userId: savedUser._id});
+
     return NextResponse.json(
       {
         message: "User created successfully",
@@ -44,7 +49,8 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error: any) {
-    console.log("Signup failed", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.log("Signup failed", error);
+    return NextResponse.json({ error: error }, { status: 500 });
   }
 }
+

@@ -7,6 +7,7 @@ import Link from "next/link";
 function Profile() {
   const router = useRouter();
   const [data, setData] = React.useState("nothing");
+  const [email, setEmail] = React.useState("");
 
   const handleLogout = async () => {
     try {
@@ -23,6 +24,16 @@ function Profile() {
       console.log(response.data);
       setData(response.data.data._id);
     } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleResetPassword = async () => {
+    const router = useRouter();
+    try {
+    axios.get(`/api/users/reset?email=${email}`);
+    router.push("/reset");
+    } catch (error: any) {
       console.error(error);
     }
   };
@@ -47,7 +58,24 @@ function Profile() {
       <button
         onClick={getUserDetails}
         className="bg-green-800 mt-4 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >GetUser Details</button>
+      >
+        GetUser Details
+      </button>
+      <form className="flex flex-col items-center justify-center py-2" onSubmit={handleResetPassword}>
+            <input
+            type="email"
+            placeholder="Enter your email"
+            className="p-2 border border-gray-400 rounded text-black"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            />
+            <button
+            type="submit"
+            className="bg-blue-500 text-white rounded p-2 mt-2"
+            >
+            Reset Password
+            </button>
+        </form>
     </div>
   );
 }
